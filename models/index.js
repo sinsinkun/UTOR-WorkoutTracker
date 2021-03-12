@@ -6,7 +6,11 @@ const workoutSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  exercises: [ Schema.Types.Mixed ]
+  exercises: [ Schema.Types.Mixed ],
+  totalDuration: {
+    type: Number,
+    default: 0
+  }
 })
 
 const Workout = mongoose.model("Workout", workoutSchema);
