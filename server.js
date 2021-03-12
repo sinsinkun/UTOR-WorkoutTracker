@@ -36,7 +36,7 @@ app.get("/api/workouts", async (req, res) => {
 app.put("/api/workouts/:id", async (req, res) => {
   console.log("PUT REQUEST: add new exercise to id", req.params.id);
   console.log(req.body);
-  if (req.params.id) {
+  if (req.params.id && req.params.id !== "undefined") {
     const oldData = await db.Workout.findById(req.params.id);
     const newDuration = oldData.totalDuration + req.body.duration;
     await db.Workout.updateOne({_id:mongoose.Types.ObjectId(req.params.id)}, {
@@ -48,11 +48,12 @@ app.put("/api/workouts/:id", async (req, res) => {
 })
 
 // API route: add new workout document
-app.post("/api/workouts", (req, res) => {
+app.post("/api/workouts", async (req, res) => {
   console.log("POST REQUEST: add new workout");
   console.log(req.body);
-  // ...
-  res.send({ message: "success"});
+  const newWorkout = await new db.Workout(req.body).save();
+  console.log(newWorkout);
+  res.send(newWorkout);
 })
 
 // API route: get workouts in range
