@@ -17,19 +17,21 @@ app.get("/exercise", (req, res) => {
   res.sendFile("exercise.html", { root: "./public" });
 })
 
+// HTML route: stats.html
+app.get("/stats", (req, res) => {
+  console.log("GET REQUEST: stats HTML page");
+  res.sendFile("stats.html", { root: "./public" });
+})
+
 // API route: get last workout
 app.get("/api/workouts", async (req, res) => {
   console.log("GET REQUEST: get last workout");
-  let output = [{},{}];
-  await db.Workout.find({}, (err,data) => {
-    if (err) console.log(err);
-    else output = data;
+  await db.Workout.find().sort({_id:-1}).limit(1)
+  .then(data => {
+    console.log(data);
+    res.json(data);
   })
-  for (let i=0; i<output.length; i++) {
-    console.log("day:", output[i].day);
-    console.log("exercises:", output[i].exercises);
-  }
-  res.send(output);
+  .catch(err => res.json(err));
 })
 
 // API route: add new exercise to id
@@ -57,11 +59,15 @@ app.post("/api/workouts", async (req, res) => {
 })
 
 // API route: get workouts in range
-app.get("/api/workouts/range", (req, res) => {
+app.get("/api/workouts/range", async (req, res) => {
   console.log("GET REQUEST: get workouts in range");
-  let data = {};
-  // ???
-  res.send(data);
+  
+  await db.Workout.find().sort({_id:-1}).limit(7)
+  .then(data => { 
+    console.log(data);
+    res.json(data);
+  })
+  .catch(err => res.json(err));
 })
 
 // start server
