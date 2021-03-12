@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const PORT = process.env.PORT || 8080;
 
 const mongoose = require("mongoose");
 const db = require("./models");
@@ -71,6 +72,6 @@ app.get("/api/workouts/range", async (req, res) => {
 })
 
 // start server
-app.listen(8080, () => {
+app.listen(PORT, () => {
   console.log('Opened server at localhost:8080');
 })
